@@ -1,14 +1,14 @@
 //
-//  ImagesTableViewController.h
+//  Comment.m
 //  Blocstagram
 //
 //  Created by Ryan Walker on 10/7/15.
 //  Copyright © 2015 Ryan Walker. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "Comment.h"
+#import "User.h"
 
-@interface ImagesTableViewController : UITableViewController
-
+@implementation Comment
 
 @end
