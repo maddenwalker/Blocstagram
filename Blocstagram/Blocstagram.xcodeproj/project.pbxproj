@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C2C2D6E1BC71C7400121853 /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C2D6D1BC71C7400121853 /* APIKeys.m */; settings = {ASSET_TAGS = (); }; };
+		8C2C2D701BC71CC200121853 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C2C2D6F1BC71CC200121853 /* APIKeys.plist */; settings = {ASSET_TAGS = (); }; };
+		8C2C2D731BC71EDF00121853 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C2D721BC71EDF00121853 /* LoginViewController.m */; settings = {ASSET_TAGS = (); }; };
 		8C679EDA1BC5A92D004376E0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C679ED91BC5A92D004376E0 /* main.m */; };
 		8C679EDD1BC5A92D004376E0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C679EDC1BC5A92D004376E0 /* AppDelegate.m */; };
 		8C679EE51BC5A92D004376E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C679EE41BC5A92D004376E0 /* Assets.xcassets */; };
@@ -49,6 +52,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8C2C2D6C1BC71C7400121853 /* APIKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIKeys.h; sourceTree = "<group>"; };
+		8C2C2D6D1BC71C7400121853 /* APIKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIKeys.m; sourceTree = "<group>"; };
+		8C2C2D6F1BC71CC200121853 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
+		8C2C2D711BC71EDF00121853 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		8C2C2D721BC71EDF00121853 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		8C679ED51BC5A92D004376E0 /* Blocstagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blocstagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C679ED91BC5A92D004376E0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8C679EDB1BC5A92D004376E0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -192,6 +200,9 @@
 		8C7030611BC5C33A00AF1D05 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				8C2C2D6C1BC71C7400121853 /* APIKeys.h */,
+				8C2C2D6D1BC71C7400121853 /* APIKeys.m */,
+				8C2C2D6F1BC71CC200121853 /* APIKeys.plist */,
 				8C70305E1BC5C33600AF1D05 /* User.h */,
 				8C70305F1BC5C33600AF1D05 /* User.m */,
 				8C7030621BC5C3CE00AF1D05 /* Media.h */,
@@ -220,6 +231,8 @@
 				8C679EDC1BC5A92D004376E0 /* AppDelegate.m */,
 				8C679F201BC5AB6E004376E0 /* ImagesTableViewController.h */,
 				8C679F211BC5AB6E004376E0 /* ImagesTableViewController.m */,
+				8C2C2D711BC71EDF00121853 /* LoginViewController.h */,
+				8C2C2D721BC71EDF00121853 /* LoginViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -335,6 +348,7 @@
 				8C679F161BC5AA70004376E0 /* 1.jpg in Resources */,
 				8C679EE81BC5A92D004376E0 /* LaunchScreen.storyboard in Resources */,
 				8C679F1A1BC5AA70004376E0 /* 5.jpg in Resources */,
+				8C2C2D701BC71CC200121853 /* APIKeys.plist in Resources */,
 				8C679F1C1BC5AA70004376E0 /* 7.jpg in Resources */,
 				8C679F171BC5AA70004376E0 /* 2.jpg in Resources */,
 				8C679F1F1BC5AA70004376E0 /* 10.jpg in Resources */,
@@ -367,9 +381,11 @@
 				8C7030671BC5C46D00AF1D05 /* Comment.m in Sources */,
 				8CC9DDFF1BC5D27000A7E520 /* MediaTableViewCell.m in Sources */,
 				8C7030641BC5C3CE00AF1D05 /* Media.m in Sources */,
+				8C2C2D731BC71EDF00121853 /* LoginViewController.m in Sources */,
 				8C679EDD1BC5A92D004376E0 /* AppDelegate.m in Sources */,
 				8C70306B1BC5C51400AF1D05 /* DataSource.m in Sources */,
 				8C679EDA1BC5A92D004376E0 /* main.m in Sources */,
+				8C2C2D6E1BC71C7400121853 /* APIKeys.m in Sources */,
 				8C679F221BC5AB6E004376E0 /* ImagesTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
