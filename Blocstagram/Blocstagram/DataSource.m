@@ -21,8 +21,6 @@
 @property (assign, nonatomic) BOOL isRefreshing;
 @property (assign, nonatomic) BOOL isLoadingOlderItems;
 @property (strong, nonatomic) NSString *accessToken;
-@property (assign, nonatomic) BOOL isRefreshing;
-@property (assign, nonatomic) BOOL isLoadingOlderItems;
 @property (strong, nonatomic) NSData *responseData;
 
 @end
