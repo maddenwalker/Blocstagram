@@ -10,6 +10,8 @@
 #import "User.h"
 #import "Media.h"
 #import "Comment.h"
+#import "APIKeys.h"
+#import "LoginViewController.h"
 
 @interface DataSource () {
     NSMutableArray *_mediaItems;
@@ -18,6 +20,10 @@
 @property (strong, nonatomic) NSArray *mediaItems;
 @property (assign, nonatomic) BOOL isRefreshing;
 @property (assign, nonatomic) BOOL isLoadingOlderItems;
+@property (strong, nonatomic) NSString *accessToken;
+@property (assign, nonatomic) BOOL isRefreshing;
+@property (assign, nonatomic) BOOL isLoadingOlderItems;
+@property (strong, nonatomic) NSData *responseData;
 
 @end
 
@@ -37,10 +43,15 @@
     self = [super init];
     
     if (self) {
-        [self addRandomData];
+        [self registerForAccessTokenNotification];
     }
     
     return self;
+}
+
++ (NSString *) instagramClientID {
+    APIKeys *apiKey = [[APIKeys alloc] init];
+    return [apiKey valueForAPIKey:@"CLIENT_ID"];
 }
 
 #pragma mark - Key/Value Observing
@@ -69,6 +80,16 @@
     [_mediaItems replaceObjectAtIndex:index withObject:object];
 }
 
+#pragma mark - Notification Center Registration
+
+- (void) registerForAccessTokenNotification {
+    [[NSNotificationCenter defaultCenter] addObserverForName:LoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        self.accessToken = note.object;
+        // Got a token; populate the initial data
+        [self populateDataWithParameters:nil];
+    }];
+}
+
 #pragma mark - manipulating data
 
 - (void) deleteMediaItem:(Media *)item {
@@ -87,13 +108,7 @@
     if (self.isRefreshing == NO) {
         self.isRefreshing = YES;
         
-        Media *media = [[Media alloc] init];
-        media.user = [self randomUser];
-        media.image = [UIImage imageNamed:@"10.jpg"];
-        media.caption = [self randomSentence];
-        
-        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
-        [mutableArrayWithKVO insertObject:media atIndex:0];
+        //TODO: add images
         
         self.isRefreshing = NO;
         
@@ -107,13 +122,7 @@
     if (self.isLoadingOlderItems == NO) {
         self.isLoadingOlderItems = YES;
         
-        Media *media = [[Media alloc] init];
-        media.user = [self randomUser];
-        media.image = [UIImage imageNamed:@"1.jpg"];
-        media.caption = [self randomSentence];
-        
-        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
-        [mutableArrayWithKVO addObject:media];
+        //TODO: add images
         
         self.isLoadingOlderItems = NO;
         
@@ -123,85 +132,48 @@
     }
 }
 
-#pragma mark - random data creation
-- (void) addRandomData {
-    NSMutableArray *randomMediaItems = [NSMutableArray array];
-    
-    for (int i = 1; i <= 10; i++) {
-        NSString *imageName = [NSString stringWithFormat:@"%d.jpg", i];
-        UIImage *image = [UIImage imageNamed:imageName];
-        
-        if (image) {
-            Media *media = [[Media alloc] init];
-            media.user = [self randomUser];
-            media.image = image;
-            media.caption = [self randomSentence];
+#pragma mark - access IG api
+
+- (void) populateDataWithParameters:(NSDictionary *)parameters {
+    if (self.accessToken) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            NSMutableString *urlString = [NSMutableString stringWithFormat:@"https://api.instagram.com/v1/users/self/feed?access_token=%@", self.accessToken];
             
-            NSUInteger commentCount = arc4random_uniform(10) + 2;
-            NSMutableArray *randomComments = [NSMutableArray array];
-            
-            for (int i = 0; i <= commentCount; i++) {
-                Comment *randomComment = [self randomComment];
-                [randomComments addObject:randomComment];
+            for (NSString *parameterName in parameters) {
+                [urlString appendFormat:@"&%@=%@", parameterName, parameters[parameterName]];
             }
             
-            media.comments = randomComments;
+            NSURL *url = [NSURL URLWithString:urlString];
             
-            [randomMediaItems addObject:media];
-        }
+            if (url) {
+                NSURLRequest *request = [NSURLRequest requestWithURL:url];
+                
+                NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                    self.responseData = data;
+                    
+                    if (self.responseData) {
+                        NSError *jsonError;
+                        NSDictionary *feedDictionary = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:&jsonError];
+                        
+                        if (feedDictionary) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self parseDataFromFeedDictionary:feedDictionary fromRequestWithParameters:parameters];
+                            });
+                        }
+                    }
+
+                }];
+                
+                [dataTask resume];
+                
+            }
+        });
+        
     }
-    
-    self.mediaItems = randomMediaItems;
 }
 
-- (User *) randomUser {
-    User *user = [[User alloc] init];
-    
-    user.userName = [self randomStringOfLength:arc4random_uniform(10) + 2];
-    
-    NSString *firstName = [self randomStringOfLength:arc4random_uniform(7) + 2];
-    NSString *lastName = [self randomStringOfLength:arc4random_uniform(12) + 2];
-    
-    user.fullName = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-    
-    return user;
-}
-
-- (Comment *) randomComment {
-    Comment *comment = [[Comment alloc] init];
-    
-    comment.from = [self randomUser];
-    comment.text = [self randomSentence];
-    
-    return comment;
-}
-
-- (NSString *) randomSentence {
-    NSUInteger wordCount = arc4random_uniform(20) + 2;
-    
-    NSMutableString *randomSentence = [[NSMutableString alloc] init];
-    
-    for (int i = 0; i <= wordCount; i++) {
-        NSString *randomWord = [self randomStringOfLength:arc4random_uniform(12) + 2];
-        [randomSentence appendFormat:@"%@", randomWord];
-    }
-    
-    return randomSentence;
-}
-
-- (NSString *) randomStringOfLength:(NSUInteger) len {
-    
-    NSString *alphabet = @"abcdefghijklmnopqrstuvwxyz";
-    
-    NSMutableString *s = [NSMutableString string];
-    
-    for (NSUInteger i = 0U; i < len; i++) {
-        u_int32_t r = arc4random_uniform((u_int32_t)[alphabet length]);
-        unichar c = [alphabet characterAtIndex:r];
-        [s appendFormat:@"%C", c];
-    }
-    
-    return [NSString stringWithFormat:@"%@", s];
+- (void) parseDataFromFeedDictionary:(NSDictionary *)dictionary fromRequestWithParameters:(NSDictionary *)parameters {
+    NSLog(@"%@", dictionary);
 }
 
 @end
