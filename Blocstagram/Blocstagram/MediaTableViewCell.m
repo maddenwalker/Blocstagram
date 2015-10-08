@@ -21,10 +21,13 @@
 
 static UIFont *lightFont;
 static UIFont *boldFont;
+static NSNumber *captionKerning;
 static UIColor *usernameLabelGray;
 static UIColor *commentLabelGray;
+static UIColor *firstCommentColorOrange;
 static UIColor *linkColor;
 static NSParagraphStyle *paragraphStyle;
+static NSParagraphStyle *otherCommentsParagraphStyle;
 
 @implementation MediaTableViewCell
 
@@ -57,9 +60,11 @@ static NSParagraphStyle *paragraphStyle;
 + (void) load {
     lightFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:11];
     boldFont = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11];
+    captionKerning = [NSNumber numberWithFloat:1];
     usernameLabelGray = [UIColor colorWithRed:0.933 green:0.933 blue:0.933 alpha:1];
     commentLabelGray = [UIColor colorWithRed:0.898 green:0.898 blue:0.898 alpha:1];
     linkColor = [UIColor colorWithRed:0.345 green:0.314 blue:0.427 alpha:1];
+    firstCommentColorOrange = [UIColor colorWithRed: 239.0 / 255.0 green: 144.0 / 255.0 blue: 0.0 alpha:1];
     
     NSMutableParagraphStyle *mutableParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     mutableParagraphStyle.headIndent = 20.0;
@@ -68,6 +73,15 @@ static NSParagraphStyle *paragraphStyle;
     mutableParagraphStyle.paragraphSpacingBefore = 5;
     
     paragraphStyle = mutableParagraphStyle;
+    
+    NSMutableParagraphStyle *otherCommentMutableParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+    otherCommentMutableParagraphStyle.alignment = 2;
+    otherCommentMutableParagraphStyle.headIndent = 20.0;
+    otherCommentMutableParagraphStyle.firstLineHeadIndent = 20.0;
+    otherCommentMutableParagraphStyle.tailIndent = -20.0;
+    otherCommentMutableParagraphStyle.paragraphSpacingBefore = 5;
+    
+    otherCommentsParagraphStyle = otherCommentMutableParagraphStyle;
 }
 
 - (void) setMediaItem:(Media *)mediaItem {
@@ -122,9 +136,11 @@ static NSParagraphStyle *paragraphStyle;
     NSMutableAttributedString *mutableUsernameAndCaptionString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : [lightFont fontWithSize:usernameFontSize], NSParagraphStyleAttributeName : paragraphStyle}];
     
     NSRange usernameRange = [baseString rangeOfString:self.mediaItem.user.userName];
+    NSRange captionRange = NSMakeRange(usernameRange.length, [baseString length] - usernameRange.length);
     
     [mutableUsernameAndCaptionString addAttribute:NSFontAttributeName value:[boldFont fontWithSize:usernameFontSize] range:usernameRange];
     [mutableUsernameAndCaptionString addAttribute:NSForegroundColorAttributeName value:linkColor range:usernameRange];
+    [mutableUsernameAndCaptionString addAttribute:NSKernAttributeName value:captionKerning range:captionRange];
     
     return mutableUsernameAndCaptionString;
 }
@@ -134,10 +150,22 @@ static NSParagraphStyle *paragraphStyle;
     
     for (Comment *comment in self.mediaItem.comments) {
         NSString *baseString = [NSString stringWithFormat:@"%@ %@\n", comment.from.userName, comment.text];
+        NSRange usernameRange = [baseString rangeOfString:comment.from.userName];
+        NSRange commentRange = NSMakeRange(usernameRange.length, [baseString length] - usernameRange.length);
         
         NSMutableAttributedString *oneCommentString = [[NSMutableAttributedString alloc] initWithString:baseString attributes:@{NSFontAttributeName : lightFont, NSParagraphStyleAttributeName : paragraphStyle}];
         
-        NSRange usernameRange = [baseString rangeOfString:comment.from.userName];
+        if ([self.mediaItem.comments indexOfObject:comment] == 0 ) {
+            [oneCommentString addAttribute:NSForegroundColorAttributeName value:firstCommentColorOrange range:commentRange];
+
+        }
+        
+        if ( ( [self.mediaItem.comments indexOfObject:comment] % 2 ) != 0 ) {
+            [oneCommentString addAttribute:NSParagraphStyleAttributeName value:otherCommentsParagraphStyle range:NSMakeRange(0, [oneCommentString length])];
+        }
+        
+        //check to see if odd or even comments and align differently; perhaps using modulo?
+        
         [oneCommentString addAttribute:NSFontAttributeName value:boldFont range:usernameRange];
         [oneCommentString addAttribute:NSForegroundColorAttributeName value:linkColor range:usernameRange];
         
