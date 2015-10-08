@@ -15,5 +15,6 @@
 +(instancetype) sharedInstance;
 @property (strong, nonatomic, readonly) NSArray *mediaItems;
 - (void) deleteMediaItem:(Media *)item;
+- (void) moveMediaItemToFirstInArray:(Media *)item;
 
 @end
