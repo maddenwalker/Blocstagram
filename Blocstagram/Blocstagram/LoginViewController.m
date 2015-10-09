@@ -9,9 +9,12 @@
 #import "LoginViewController.h"
 #import "DataSource.h"
 
+#define kWebBrowserBackString NSLocalizedString(@"Back", "Back Command")
+
 @interface LoginViewController () <UIWebViewDelegate>
 
 @property (weak, nonatomic) UIWebView *webView;
+@property (strong, nonatomic) UIBarButtonItem *backButton;
 
 @end
 
@@ -33,6 +36,9 @@ NSString *const LoginViewControllerDidGetAccessTokenNotification = @"LoginViewCo
     self.webView = webView;
     
     self.title = NSLocalizedString(@"Login", @"Login");
+    
+    //add navigation bar button item
+    [self addNavigationButton];
     
     NSString *urlString = [NSString stringWithFormat:@"https://instagram.com/oauth/authorize/?client_id=%@&redirect_uri=%@&response_type=token", [DataSource instagramClientID], [self redirectURI]];
     NSURL *url = [NSURL URLWithString:urlString];
@@ -70,6 +76,15 @@ NSString *const LoginViewControllerDidGetAccessTokenNotification = @"LoginViewCo
     return YES;
 }
 
+-(void)webViewDidFinishLoad:(UIWebView *)webView {
+    if (webView.canGoBack) {
+        [self updateButton:YES];
+    } else {
+        [self updateButton:NO];
+    }
+}
+
+
 #pragma helper methods
 
 -(void)clearInstagramCookies {
@@ -79,6 +94,21 @@ NSString *const LoginViewControllerDidGetAccessTokenNotification = @"LoginViewCo
             [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
         }
     }
+}
+
+-(void) addNavigationButton {
+    self.backButton = [[UIBarButtonItem alloc] initWithTitle:kWebBrowserBackString style:UIBarButtonItemStylePlain target:self action:@selector(backBarButtonItemPressed:)];
+    self.backButton.enabled = NO;
+    
+    self.navigationItem.rightBarButtonItem = self.backButton;
+}
+
+- (void) backBarButtonItemPressed:(UIButton *)button {
+    [self.webView goBack];
+}
+
+- (void) updateButton:(BOOL)enabled {
+    self.backButton.enabled = enabled;
 }
 
 @end
