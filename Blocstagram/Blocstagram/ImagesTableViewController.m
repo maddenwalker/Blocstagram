@@ -42,6 +42,8 @@
     
     [self.tableView registerClass:[MediaTableViewCell class] forCellReuseIdentifier:@"mediaCell"];
     
+    self.tableView.delegate = self;
+    
     self.sharedInstance = [DataSource sharedInstance];
     
 }
