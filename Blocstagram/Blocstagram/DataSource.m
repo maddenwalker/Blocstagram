@@ -20,6 +20,7 @@
 @property (strong, nonatomic) NSArray *mediaItems;
 @property (assign, nonatomic) BOOL isRefreshing;
 @property (assign, nonatomic) BOOL isLoadingOlderItems;
+@property (assign, nonatomic) BOOL thereAreNoMoreOlderMessages;
 @property (strong, nonatomic) NSString *accessToken;
 @property (strong, nonatomic) NSData *responseData;
 
@@ -84,7 +85,7 @@
     [[NSNotificationCenter defaultCenter] addObserverForName:LoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         self.accessToken = note.object;
         // Got a token; populate the initial data
-        [self populateDataWithParameters:nil];
+        [self populateDataWithParameters:nil completionHandler:nil];
     }];
 }
 
@@ -103,36 +104,52 @@
 #pragma mark - completion handler methods
 
 - (void) requestNewItemsWithCompletionHandler:(NewItemCompletionBlock)completionHandler {
+    self.thereAreNoMoreOlderMessages = NO;
     if (self.isRefreshing == NO) {
         self.isRefreshing = YES;
         
-        //TODO: add images
+        NSString *minID = [[self.mediaItems firstObject] idNumber];
+        NSDictionary *parameters;
         
-        self.isRefreshing = NO;
-        
-        if (completionHandler) {
-            completionHandler(nil);
+        if (minID) {
+            parameters = @{@"min_id":minID};
         }
+        
+        [self populateDataWithParameters:parameters completionHandler:^(NSError *error) {
+            self.isRefreshing = NO;
+            
+            if (completionHandler) {
+                completionHandler(error);
+            }
+        }];
+        
     }
 }
 
 - (void) requestOldItemsWithCompletionHandler:(NewItemCompletionBlock)completionHandler {
-    if (self.isLoadingOlderItems == NO) {
+    if (self.isLoadingOlderItems == NO && self.thereAreNoMoreOlderMessages == NO) {
         self.isLoadingOlderItems = YES;
         
-        //TODO: add images
+        NSString *maxID = [[self.mediaItems lastObject] idNumber];
+        NSDictionary *parameters;
         
-        self.isLoadingOlderItems = NO;
-        
-        if (completionHandler) {
-            completionHandler(nil);
+        if (maxID) {
+            parameters = @{@"max_id":maxID};
         }
+        
+        [self populateDataWithParameters:parameters completionHandler:^(NSError *error) {
+            self.isLoadingOlderItems = NO;
+            
+            if (completionHandler) {
+                completionHandler(nil);
+            }
+        }];
     }
 }
 
 #pragma mark - access IG api
 
-- (void) populateDataWithParameters:(NSDictionary *)parameters {
+- (void) populateDataWithParameters:(NSDictionary *)parameters completionHandler:(NewItemCompletionBlock)completionHandler {
     if (self.accessToken) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
             NSMutableString *urlString = [NSMutableString stringWithFormat:@"https://api.instagram.com/v1/users/self/feed?access_token=%@", self.accessToken];
@@ -156,8 +173,21 @@
                         if (feedDictionary) {
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 [self parseDataFromFeedDictionary:feedDictionary fromRequestWithParameters:parameters];
+                                
+                                if (completionHandler) {
+                                    completionHandler(nil);
+                                }
+                            });
+                        } else if (completionHandler) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                completionHandler(jsonError);
                             });
                         }
+                            
+                    } else if (completionHandler) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            completionHandler(error);
+                        });
                     }
 
                 }];
@@ -170,8 +200,75 @@
     }
 }
 
+#pragma mark - parsing data
+
 - (void) parseDataFromFeedDictionary:(NSDictionary *)dictionary fromRequestWithParameters:(NSDictionary *)parameters {
-    NSLog(@"%@", dictionary);
+    NSArray *mediaArray = dictionary[@"data"];
+    
+    NSMutableArray *tmpMediaItems = [NSMutableArray array];
+    
+    for (NSDictionary *mediaDictionary in mediaArray) {
+        Media *mediaItem = [[Media alloc] initWithDictionary:mediaDictionary];
+        
+        if (mediaItem) {
+            [tmpMediaItems addObject:mediaItem];
+            [self downloadImageForMediaItem:mediaItem];
+        }
+        
+    }
+    
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+    
+    if (parameters[@"min_id"]) {
+        
+        //this was a pull-to-refresh request
+        NSRange rangeOfIndexes = NSMakeRange(0, tmpMediaItems.count);
+        NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
+        
+        [mutableArrayWithKVO insertObjects:tmpMediaItems atIndexes:indexSetOfNewObjects];
+        
+    } else if (parameters[@"max_id"]) {
+        
+        //this was an infinite scroll request
+        
+        if (tmpMediaItems.count == 0) {
+            //disable infinite scroll , since there are no more images
+            self.thereAreNoMoreOlderMessages = YES;
+        } else {
+            [mutableArrayWithKVO addObjectsFromArray:tmpMediaItems];
+        }
+        
+    } else {
+        [self willChangeValueForKey:@"mediaItems"];
+        self.mediaItems = tmpMediaItems;
+        [self didChangeValueForKey:@"mediaItems"];
+    }
+}
+
+#pragma mark - helper methods
+
+-(void) downloadImageForMediaItem:(Media *)mediaItem {
+    if (mediaItem.mediaURL && !mediaItem.image) {
+        NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithURL:mediaItem.mediaURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (data) {
+                UIImage *image = [UIImage imageWithData:data];
+                
+                if (image) {
+                    mediaItem.image = image;
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+                    NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
+                    [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
+                });
+            } else {
+                NSLog(@"Error downloading image: %@", error);
+            }
+        }];
+        
+        [dataTask resume];
+    }
 }
 
 @end

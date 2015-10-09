@@ -34,12 +34,6 @@ static NSParagraphStyle *otherCommentsParagraphStyle;
 
 @implementation MediaTableViewCell
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
 - (id) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -187,6 +181,15 @@ static NSParagraphStyle *otherCommentsParagraphStyle;
     self.separatorInset = UIEdgeInsetsMake(0, CGRectGetWidth(self.bounds) / 2.0 , 0, CGRectGetWidth(self.bounds) / 2.0 );
 }
 
+- (void) setHighlighted:(BOOL)highlighted {
+    [super setHighlighted:NO];
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:NO animated:animated];
+    
+    // Configure the view for the selected state
+}
 
 - (NSAttributedString *) usernameAndCaptionString {
     CGFloat usernameFontSize = 15;

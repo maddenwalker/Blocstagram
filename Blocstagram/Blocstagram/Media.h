@@ -19,4 +19,6 @@
 @property (strong, nonatomic) NSString *caption;
 @property (strong, nonatomic) NSArray *comments;
 
+- (instancetype) initWithDictionary:(NSDictionary *)mediaDictionary;
+
 @end

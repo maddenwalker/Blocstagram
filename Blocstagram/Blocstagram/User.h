@@ -16,4 +16,6 @@
 @property (strong, nonatomic) NSURL *profilePictureURL;
 @property (strong, nonatomic) UIImage *profilePicture;
 
+- (instancetype) initWithDictionary:(NSDictionary *)userDictionary;
+
 @end
