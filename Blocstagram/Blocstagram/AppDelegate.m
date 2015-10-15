@@ -27,14 +27,20 @@
     [DataSource sharedInstance];
     
     UINavigationController *navigationVC = [[UINavigationController alloc] init];
-    LoginViewController *loginVC = [[LoginViewController alloc] init];
     
-    [navigationVC setViewControllers:@[loginVC] animated:YES];
-    
-    [[NSNotificationCenter defaultCenter] addObserverForName:LoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+    if (![DataSource sharedInstance].accessToken) {
+        LoginViewController *loginVC = [[LoginViewController alloc] init];
+        
+        [navigationVC setViewControllers:@[loginVC] animated:YES];
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName:LoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+            ImagesTableViewController *imagesVC = [[ImagesTableViewController alloc] init];
+            [navigationVC setViewControllers:@[imagesVC] animated:YES];
+        }];
+    } else {
         ImagesTableViewController *imagesVC = [[ImagesTableViewController alloc] init];
         [navigationVC setViewControllers:@[imagesVC] animated:YES];
-    }];
+    }
     
     self.window.rootViewController = navigationVC;
     

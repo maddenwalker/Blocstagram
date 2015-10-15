@@ -8,11 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-@class Media;
+@class Media, MediaTableViewCell;
+
+@protocol MediaTableViewCellDelegate <NSObject>
+
+- (void) cell:(MediaTableViewCell *)cell didTapImageView:(UIImageView *)imageView;
+
+@end
 
 @interface MediaTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) Media *mediaItem;
+@property (weak, nonatomic) id <MediaTableViewCellDelegate> delegate;
 
 + (CGFloat) heightForMediaItem:(Media *)mediaItem width:(CGFloat)width;
 
