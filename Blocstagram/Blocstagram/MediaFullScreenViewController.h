@@ -15,8 +15,8 @@
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIImageView *imageView;
 
-- (instancetype) initWithMedia:(Media *)media;
+//- (instancetype) initWithMedia:(Media *)media;
 
-- (void) centerScrollView;
+//- (void) centerScrollView;
 
 @end
