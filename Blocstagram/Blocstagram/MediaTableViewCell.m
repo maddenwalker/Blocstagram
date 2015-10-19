@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NSLayoutConstraint *commentLabelHeightConstraint;
 
 @property (strong, nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
+@property (strong, nonatomic) UILongPressGestureRecognizer *longPressGestureRecognizer;
 
 @end
 
@@ -45,6 +46,10 @@ static NSParagraphStyle *otherCommentsParagraphStyle;
         self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
         self.tapGestureRecognizer.delegate = self;
         [self.mediaImageView addGestureRecognizer:self.tapGestureRecognizer];
+        
+        self.longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFired:)];
+        self.longPressGestureRecognizer.delegate = self;
+        [self.mediaImageView addGestureRecognizer:self.longPressGestureRecognizer];
         
         self.usernameAndCaptionLabel = [[UILabel alloc] init];
         self.usernameAndCaptionLabel.numberOfLines = 0;
@@ -199,10 +204,16 @@ static NSParagraphStyle *otherCommentsParagraphStyle;
     // Configure the view for the selected state
 }
 
-#pragma mark - UIImage View
+#pragma mark - Gesture Recognizers
 
 - (void) tapFired:(UITapGestureRecognizer *)sender {
     [self.delegate cell:self didTapImageView:self.mediaImageView];
+}
+
+- (void) longPressFired:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        [self.delegate cell:self didLongPressImageView:self.mediaImageView];
+    }
 }
 
 #pragma mark - UIGestureRecognizerDelegate

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		26A904C86A397A0D04946281 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 821C4FB748FDDA79A371EDF9 /* libPods.a */; };
+		8C26B3CA1BD5A2BB00AE03BA /* MediaFullScreenAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26B3C91BD5A2BB00AE03BA /* MediaFullScreenAnimator.m */; settings = {ASSET_TAGS = (); }; };
 		8C2C2D6E1BC71C7400121853 /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C2D6D1BC71C7400121853 /* APIKeys.m */; settings = {ASSET_TAGS = (); }; };
 		8C2C2D701BC71CC200121853 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C2C2D6F1BC71CC200121853 /* APIKeys.plist */; settings = {ASSET_TAGS = (); }; };
 		8C2C2D731BC71EDF00121853 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C2D721BC71EDF00121853 /* LoginViewController.m */; settings = {ASSET_TAGS = (); }; };
@@ -55,6 +56,8 @@
 
 /* Begin PBXFileReference section */
 		821C4FB748FDDA79A371EDF9 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C26B3C81BD5A2BB00AE03BA /* MediaFullScreenAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFullScreenAnimator.h; sourceTree = "<group>"; };
+		8C26B3C91BD5A2BB00AE03BA /* MediaFullScreenAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaFullScreenAnimator.m; sourceTree = "<group>"; };
 		8C2C2D6C1BC71C7400121853 /* APIKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIKeys.h; sourceTree = "<group>"; };
 		8C2C2D6D1BC71C7400121853 /* APIKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIKeys.m; sourceTree = "<group>"; };
 		8C2C2D6F1BC71CC200121853 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
@@ -237,6 +240,8 @@
 		8CC9DE001BC5D27500A7E520 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8C26B3C81BD5A2BB00AE03BA /* MediaFullScreenAnimator.h */,
+				8C26B3C91BD5A2BB00AE03BA /* MediaFullScreenAnimator.m */,
 				8CC9DDFD1BC5D27000A7E520 /* MediaTableViewCell.h */,
 				8CC9DDFE1BC5D27000A7E520 /* MediaTableViewCell.m */,
 				8C9A735B1BCC2A5B00450F51 /* MediaFullScreenViewController.h */,
@@ -467,6 +472,7 @@
 				8C9A735D1BCC2A5B00450F51 /* MediaFullScreenViewController.m in Sources */,
 				8C679EDA1BC5A92D004376E0 /* main.m in Sources */,
 				8C2C2D6E1BC71C7400121853 /* APIKeys.m in Sources */,
+				8C26B3CA1BD5A2BB00AE03BA /* MediaFullScreenAnimator.m in Sources */,
 				8C679F221BC5AB6E004376E0 /* ImagesTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
