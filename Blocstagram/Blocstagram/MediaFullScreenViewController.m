@@ -12,6 +12,7 @@
 @interface MediaFullScreenViewController () <UIScrollViewDelegate>
 
 @property (strong, nonatomic) Media *media;
+@property (strong, nonatomic) UIBarButtonItem *shareButton;
 @property (strong, nonatomic) UITapGestureRecognizer *tap;
 @property (strong, nonatomic) UITapGestureRecognizer *doubleTap;
 
@@ -43,7 +44,9 @@
     self.scrollView.delegate = self;
     self.scrollView.backgroundColor = [UIColor whiteColor];
     
-    [self.view addSubview:self.scrollView];
+    for (UIView *viewsToAdd in @[self.scrollView]) {
+        [self.view addSubview:viewsToAdd];
+    }
     
     self.imageView = [UIImageView new];
     self.imageView.image = self.media.image;
@@ -51,6 +54,9 @@
     [self.scrollView addSubview:self.imageView];
     
     self.scrollView.contentSize = self.media.image.size;
+    
+    [self enableButtons];
+    
     
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
     
@@ -61,6 +67,7 @@
     
     [self.scrollView addGestureRecognizer:self.tap];
     [self.scrollView addGestureRecognizer:self.doubleTap];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,7 +78,10 @@
 - (void) viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    self.scrollView.frame = self.view.bounds;
+    CGFloat scrollViewHeight = CGRectGetHeight(self.view.bounds);
+    CGFloat scrollViewWidth = CGRectGetWidth(self.view.bounds);
+    
+    self.scrollView.frame = CGRectMake(0, 0, scrollViewWidth, scrollViewHeight);
     
     CGSize scrollViewFrameSize = self.scrollView.frame.size;
     CGSize scrollViewContentSize = self.scrollView.contentSize;
@@ -108,10 +118,17 @@
     self.imageView.frame = contentsFrame;
 }
 
+#pragma mark - button taps
+
+- (void) shareButtonTapped {
+    [self.navigationController popViewControllerAnimated:YES];
+    [self.delegate didTapShareButton:self.media];
+}
+
 #pragma mark - UIGestureRecognizer Methods
 
 - (void) tapFired:(UITapGestureRecognizer *)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) doubleTapFired:(UITapGestureRecognizer *)sender {
@@ -140,6 +157,16 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     [self centerScrollView];
+}
+
+#pragma mark - Helper Methods
+
+- (void) enableButtons {
+    
+    self.shareButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Share", @"Share") style:UIBarButtonItemStylePlain target:self action:@selector(shareButtonTapped)];
+
+    [self.navigationItem setRightBarButtonItem:self.shareButton];
+
 }
 
 @end

@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class Media;
+@class Media, MediaFullScreenViewController;
+
+@protocol MediaFullScreenViewControllerDelegate <NSObject>
+
+- (void) didTapShareButton:(Media *)mediaItem;
+
+@end
 
 @interface MediaFullScreenViewController : UIViewController
 
@@ -16,7 +22,9 @@
 @property (strong, nonatomic) UIImageView *imageView;
 
 - (instancetype) initWithMedia:(Media *)media;
-
 - (void) centerScrollView;
+
+@property (weak, nonatomic) id <MediaFullScreenViewControllerDelegate> delegate;
+
 
 @end

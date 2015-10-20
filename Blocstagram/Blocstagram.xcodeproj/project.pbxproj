@@ -244,8 +244,6 @@
 				8C26B3C91BD5A2BB00AE03BA /* MediaFullScreenAnimator.m */,
 				8CC9DDFD1BC5D27000A7E520 /* MediaTableViewCell.h */,
 				8CC9DDFE1BC5D27000A7E520 /* MediaTableViewCell.m */,
-				8C9A735B1BCC2A5B00450F51 /* MediaFullScreenViewController.h */,
-				8C9A735C1BCC2A5B00450F51 /* MediaFullScreenViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -257,6 +255,8 @@
 				8C679EDC1BC5A92D004376E0 /* AppDelegate.m */,
 				8C679F201BC5AB6E004376E0 /* ImagesTableViewController.h */,
 				8C679F211BC5AB6E004376E0 /* ImagesTableViewController.m */,
+				8C9A735B1BCC2A5B00450F51 /* MediaFullScreenViewController.h */,
+				8C9A735C1BCC2A5B00450F51 /* MediaFullScreenViewController.m */,
 				8C2C2D711BC71EDF00121853 /* LoginViewController.h */,
 				8C2C2D721BC71EDF00121853 /* LoginViewController.m */,
 			);

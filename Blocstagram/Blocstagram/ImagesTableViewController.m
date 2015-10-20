@@ -16,7 +16,9 @@
 #import "MediaFullScreenAnimator.h"
 
 
-@interface ImagesTableViewController () <MediaTableViewCellDelegate, UIViewControllerTransitioningDelegate>
+@interface ImagesTableViewController () <   MediaTableViewCellDelegate,
+                                            MediaFullScreenViewControllerDelegate,
+                                            UIViewControllerTransitioningDelegate>
 
 @property (strong, nonatomic) DataSource *sharedInstance;
 @property (weak, nonatomic) UIImageView *lastTappedImageView;
@@ -48,6 +50,8 @@
     self.tableView.delegate = self;
     
     self.sharedInstance = [DataSource sharedInstance];
+    
+    self.title = NSLocalizedString(@"Your Feed", @"Your Feed");
     
 }
 
@@ -154,36 +158,42 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        Media *item = [self items][indexPath.row];
+        [[DataSource sharedInstance] deleteMediaItem:item];
+        [[DataSource sharedInstance] moveMediaItemToFirstInArray:item];
+    }
+    
+}
+
 #pragma mark - MediaTableViewCellDelegate
 
 - (void) cell:(MediaTableViewCell *)cell didTapImageView:(UIImageView *)imageView {
     self.lastTappedImageView = imageView;
     
     MediaFullScreenViewController *fullScreenVC = [[MediaFullScreenViewController alloc] initWithMedia:cell.mediaItem];
-    
+    fullScreenVC.delegate = self;
     fullScreenVC.transitioningDelegate = self;
     fullScreenVC.modalPresentationStyle = UIModalPresentationCustom;
     
-    [self presentViewController:fullScreenVC animated:YES completion:nil];
+    [self.navigationController pushViewController:fullScreenVC animated:YES];
 }
 
 - (void) cell:(MediaTableViewCell *)cell didLongPressImageView:(UIImageView *)imageView {
-
-    NSMutableArray *itemsToShare = [NSMutableArray array];
     
-    if (cell.mediaItem.caption.length > 0) {
-        [itemsToShare addObject:cell.mediaItem.caption];
-    }
-    
-    if (cell.mediaItem.image) {
-        [itemsToShare addObject:cell.mediaItem.image];
-    }
-    
-    if (itemsToShare.count > 0) {
-        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
-        [self presentViewController:activityVC animated:YES completion:nil];
-    }
+    [self didWantToShareMediaItem:cell.mediaItem];
+ 
 }
+
+#pragma mark - MediaFullScreenViewControllerDelegate
+
+- (void) didTapShareButton:(Media *)mediaItem {
+    [self didWantToShareMediaItem:mediaItem];
+}
+
 
 #pragma mark - UIViewControllerTransitioningDelegate
 
@@ -210,17 +220,22 @@
 }
 
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        Media *item = [self items][indexPath.row];
-        [[DataSource sharedInstance] deleteMediaItem:item];
-        [[DataSource sharedInstance] moveMediaItemToFirstInArray:item];
+#pragma mark - helper methods
+- (void) didWantToShareMediaItem:(Media *)mediaItem {
+    NSMutableArray *itemsToShare = [NSMutableArray array];
+
+    if (mediaItem.caption.length > 0) {
+        [itemsToShare addObject:mediaItem.caption];
     }
-
+    
+    if (mediaItem.image) {
+        [itemsToShare addObject:mediaItem.image];
+    }
+    
+    if (itemsToShare.count > 0) {
+        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+        [self presentViewController:activityVC animated:YES completion:nil];
+    }
 }
-
-
 
 @end
