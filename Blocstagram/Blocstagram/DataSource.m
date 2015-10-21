@@ -211,7 +211,7 @@
     NSURL *baseURL = [NSURL URLWithString:@"https://api.instagram.com/v1/"];
     self.instagramOperationManager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
     
-    AFJSONRequestSerializer *jsonSerializer = [AFJSONRequestSerializer serializer];
+    AFJSONResponseSerializer *jsonSerializer = [AFJSONResponseSerializer serializer];
     AFImageResponseSerializer *imageSerializer = [AFImageResponseSerializer serializer];
     
     imageSerializer.imageScale = 1.0;
