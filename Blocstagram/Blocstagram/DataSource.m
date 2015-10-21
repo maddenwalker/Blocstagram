@@ -13,6 +13,7 @@
 #import "APIKeys.h"
 #import "LoginViewController.h"
 #import <UICKeyChainStore.h>
+#import <AFNetworking.h>
 
 @interface DataSource () {
     NSMutableArray *_mediaItems;
@@ -24,6 +25,7 @@
 @property (assign, nonatomic) BOOL thereAreNoMoreOlderMessages;
 @property (strong, nonatomic) NSString *accessToken;
 @property (strong, nonatomic) NSData *responseData;
+@property (strong, nonatomic) AFHTTPRequestOperationManager *instagramOperationManager;
 
 @end
 
@@ -43,6 +45,8 @@
     self = [super init];
     
     if (self) {
+        [self createOperationManager];
+        
         self.accessToken = [UICKeyChainStore stringForKey:@"access token"];
         
         if (!self.accessToken) {
@@ -179,53 +183,43 @@
 
 - (void) populateDataWithParameters:(NSDictionary *)parameters completionHandler:(NewItemCompletionBlock)completionHandler {
     if (self.accessToken) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            NSMutableString *urlString = [NSMutableString stringWithFormat:@"https://api.instagram.com/v1/users/self/feed?access_token=%@", self.accessToken];
-            
-            for (NSString *parameterName in parameters) {
-                [urlString appendFormat:@"&%@=%@", parameterName, parameters[parameterName]];
-            }
-            
-            NSURL *url = [NSURL URLWithString:urlString];
-            
-            if (url) {
-                NSURLRequest *request = [NSURLRequest requestWithURL:url];
-                
-                NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                    self.responseData = data;
-                    
-                    if (self.responseData) {
-                        NSError *jsonError;
-                        NSDictionary *feedDictionary = [NSJSONSerialization JSONObjectWithData:self.responseData options:0 error:&jsonError];
-                        
-                        if (feedDictionary) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [self parseDataFromFeedDictionary:feedDictionary fromRequestWithParameters:parameters];
-                                
-                                if (completionHandler) {
-                                    completionHandler(nil);
-                                }
-                            });
-                        } else if (completionHandler) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                completionHandler(jsonError);
-                            });
-                        }
-                            
-                    } else if (completionHandler) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            completionHandler(error);
-                        });
-                    }
-
-                }];
-                
-                [dataTask resume];
-                
-            }
-        });
+        NSMutableDictionary *mutableParameters = [@{@"access_token": self.accessToken} mutableCopy];
+        [mutableParameters addEntriesFromDictionary:parameters];
         
+        [self.instagramOperationManager GET:@"users/self/feed"
+                                 parameters:mutableParameters
+                                    success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+                                        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                                            [self parseDataFromFeedDictionary:responseObject fromRequestWithParameters:parameters];
+                                        }
+                                        
+                                        if (completionHandler) {
+                                            completionHandler(nil);
+                                        }
+                                    }
+                                    failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+                                        if (completionHandler) {
+                                            completionHandler(nil);
+                                        }
+        }];
     }
+}
+
+#pragma mark - AFNetworking
+
+- (void) createOperationManager {
+    NSURL *baseURL = [NSURL URLWithString:@"https://api.instagram.com/v1/"];
+    self.instagramOperationManager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
+    
+    AFJSONRequestSerializer *jsonSerializer = [AFJSONRequestSerializer serializer];
+    AFImageResponseSerializer *imageSerializer = [AFImageResponseSerializer serializer];
+    
+    imageSerializer.imageScale = 1.0;
+    
+    AFCompoundResponseSerializer *serializer = [AFCompoundResponseSerializer compoundSerializerWithResponseSerializers:@[jsonSerializer, imageSerializer]];
+    
+    self.instagramOperationManager.responseSerializer = serializer;
+    
 }
 
 #pragma mark - parsing data
@@ -279,26 +273,21 @@
 
 -(void) downloadImageForMediaItem:(Media *)mediaItem {
     if (mediaItem.mediaURL && !mediaItem.image) {
-        NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithURL:mediaItem.mediaURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            if (data) {
-                UIImage *image = [UIImage imageWithData:data];
-                
-                if (image) {
-                    mediaItem.image = image;
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
-                    NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
-                    [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
-                    [self saveImages];
-                });
-            } else {
-                NSLog(@"Error downloading image: %@", error);
-            }
+        [self.instagramOperationManager GET:mediaItem.mediaURL.absoluteString
+                                 parameters:nil
+                                    success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+                                        if ([responseObject isKindOfClass:[UIImage class]]) {
+                                            mediaItem.image = responseObject;
+                                            NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+                                            NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
+                                            [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
+                                        }
+                                        
+                                        [self saveImages];
+                                    }
+                                    failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+                                        NSLog(@"Error downloading image: %@", error);
         }];
-        
-        [dataTask resume];
     }
 }
 
