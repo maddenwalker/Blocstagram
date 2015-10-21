@@ -100,7 +100,7 @@ static NSParagraphStyle *otherCommentsParagraphStyle;
                                                                      toItem:nil
                                                                   attribute:NSLayoutAttributeNotAnAttribute
                                                                  multiplier:1
-                                                                   constant:100];
+                                                                   constant:350];
         
         self.imageHeightConstraint.identifier = @"Image height constraint";
         

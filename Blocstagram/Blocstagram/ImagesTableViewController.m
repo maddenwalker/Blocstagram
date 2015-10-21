@@ -18,7 +18,8 @@
 
 @interface ImagesTableViewController () <   MediaTableViewCellDelegate,
                                             MediaFullScreenViewControllerDelegate,
-                                            UIViewControllerTransitioningDelegate>
+                                            UIViewControllerTransitioningDelegate,
+                                            UIScrollViewDelegate>
 
 @property (strong, nonatomic) DataSource *sharedInstance;
 @property (weak, nonatomic) UIImageView *lastTappedImageView;
@@ -122,10 +123,25 @@
     }
 }
 
+- (void) loadNewImagesIfNecessary {
+    NSArray *currentIndexPaths = [self.tableView indexPathsForVisibleRows];
+    
+    for (NSIndexPath *indexPath in currentIndexPaths) {
+        Media *item = [self items][indexPath.row];
+        if (item.downloadState == MediaDownloadStateNeedsImage) {
+             [[DataSource sharedInstance] downloadImageForMediaItem:[self items][indexPath.row]];
+        }
+    }
+}
+
 #pragma mark - UIScrollView Delegates
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView {
     [self infiniteScrollIfNecessary];
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
+    [self loadNewImagesIfNecessary];
 }
 
 #pragma mark - Table view data source
@@ -140,14 +156,7 @@
     if (item.image) {
         return 350;
     } else {
-        return 150;
-    }
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    Media *mediaItem = [self items][indexPath.row];
-    if (mediaItem.downloadState == MediaDownloadStateNeedsImage) {
-        [[DataSource sharedInstance] downloadImageForMediaItem:mediaItem];
+        return 350;
     }
 }
 
@@ -162,6 +171,7 @@
     MediaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mediaCell" forIndexPath:indexPath];
     cell.delegate = self;
     cell.mediaItem = [self items][indexPath.row];
+    [self loadNewImagesIfNecessary];
     return cell;
 }
 
