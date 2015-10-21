@@ -182,6 +182,11 @@
     [self.navigationController pushViewController:fullScreenVC animated:YES];
 }
 
+- (void) cell:(MediaTableViewCell *)cell didTwoTapImageView:(UIImageView *)imageView {
+    NSLog(@"Requesting a new image now that you decided to two tap on this one");
+    [[DataSource sharedInstance] downloadImageForMediaItem:cell.mediaItem];
+}
+
 - (void) cell:(MediaTableViewCell *)cell didLongPressImageView:(UIImageView *)imageView {
     
     [self didWantToShareMediaItem:cell.mediaItem];

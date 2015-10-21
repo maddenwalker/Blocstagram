@@ -17,6 +17,7 @@ typedef void (^NewItemCompletionBlock)(NSError *error);
 +(instancetype) sharedInstance;
 @property (strong, nonatomic, readonly) NSArray *mediaItems;
 - (void) deleteMediaItem:(Media *)item;
+- (void) downloadImageForMediaItem:(Media *)mediaItem;
 - (void) moveMediaItemToFirstInArray:(Media *)item;
 - (void) requestNewItemsWithCompletionHandler:(NewItemCompletionBlock)completionHandler;
 - (void) requestOldItemsWithCompletionHandler:(NewItemCompletionBlock)completionHandler;

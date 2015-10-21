@@ -273,6 +273,7 @@
 
 -(void) downloadImageForMediaItem:(Media *)mediaItem {
     if (mediaItem.mediaURL && !mediaItem.image) {
+        NSLog(@"Downloading %@", mediaItem.mediaURL.absoluteString);
         [self.instagramOperationManager GET:mediaItem.mediaURL.absoluteString
                                  parameters:nil
                                     success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
