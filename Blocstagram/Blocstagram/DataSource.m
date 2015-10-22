@@ -206,42 +206,54 @@
 #pragma mark - Liking Media
 
 - (void) toggleLikeOnMedia:(Media *)mediaItem withCompletionHandler:(void (^)(void))completionHandler {
-    NSString *urlString = [NSString stringWithFormat:@"media/%@/likes", mediaItem.idNumber];
-    NSDictionary *parameters = @{@"access_token": self.accessToken};
+//    NSString *urlString = [NSString stringWithFormat:@"media/%@/likes", mediaItem.idNumber];
+//    NSDictionary *parameters = @{@"access_token": self.accessToken};
     
     if (mediaItem.likeButtonState == LikeStateNotLiked) {
         mediaItem.likeButtonState = LikeStateLiking;
+        [NSThread sleepForTimeInterval:1.0];
+        mediaItem.likeButtonState = LikeStateLiked;
         
-        [self.instagramOperationManager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-            mediaItem.likeButtonState = LikeStateLiked;
-            
-            if (completionHandler) {
-                completionHandler();
-            }
-        } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-            mediaItem.likeButtonState = LikeStateNotLiked;
-            
-            if (completionHandler) {
-                completionHandler();
-            }
-        }];
+        
+        //removing ineffectual IG API code
+//        [self.instagramOperationManager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+//            mediaItem.likeButtonState = LikeStateLiked;
+//            mediaItem.numberOfLikes = [NSNumber numberWithInteger:[mediaItem.numberOfLikes integerValue] + 1];
+//            
+//            if (completionHandler) {
+//                completionHandler();
+//            }
+//        } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+//            mediaItem.likeButtonState = LikeStateLiked;
+//            mediaItem.numberOfLikes = [NSNumber numberWithInteger:[mediaItem.numberOfLikes integerValue] + 1];
+//            if (completionHandler) {
+//                completionHandler();
+//            }
+//        }];
     } else if (mediaItem.likeButtonState == LikeStateLiked) {
         mediaItem.likeButtonState = LikeStateUnlking;
+        [NSThread sleepForTimeInterval:1.0];
+        mediaItem.likeButtonState = LikeStateNotLiked;
         
-        [self.instagramOperationManager DELETE:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-            mediaItem.likeButtonState = LikeStateNotLiked;
-            
-            if (completionHandler) {
-                completionHandler();
-            }
-        } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-            mediaItem.likeButtonState = LikeStateLiked;
-            
-            if (completionHandler) {
-                completionHandler();
-            }
-        }];
+        
+        //removing ineffectual IG API code
+//        [self.instagramOperationManager DELETE:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+//            mediaItem.likeButtonState = LikeStateNotLiked;
+//            mediaItem.numberOfLikes = [NSNumber numberWithInteger:[mediaItem.numberOfLikes integerValue] - 1];
+//            
+//            if (completionHandler) {
+//                completionHandler();
+//            }
+//        } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+//            mediaItem.likeButtonState = LikeStateNotLiked;
+//            mediaItem.numberOfLikes = [NSNumber numberWithInteger:[mediaItem.numberOfLikes integerValue] - 1];
+//            if (completionHandler) {
+//                completionHandler();
+//            }
+//        }];
     }
+    
+    [self saveImages];
 }
 
 #pragma mark - AFNetworking

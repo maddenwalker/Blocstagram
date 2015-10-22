@@ -18,5 +18,6 @@ typedef NS_ENUM(NSInteger, LikeState) {
 @interface LikeButton : UIButton
 
 @property (assign, nonatomic) LikeState likeButtonState;
+@property (assign, nonatomic) NSInteger numberOfLikes;
 
 @end

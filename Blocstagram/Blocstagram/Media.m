@@ -46,6 +46,12 @@
         
         self.comments = commentsArray;
         
+        if ([mediaDictionary[@"likes"][@"count"] isKindOfClass:[NSNumber class]]) {
+            self.numberOfLikes = mediaDictionary[@"likes"][@"count"];
+        } else {
+            self.numberOfLikes = @0;
+        }
+        
         BOOL userHasLiked = [mediaDictionary[@"user_has_liked"] boolValue];
         
         if (userHasLiked) {
@@ -80,6 +86,7 @@
         self.caption = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(caption))];
         self.comments = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(comments))];
         self.likeButtonState = [aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(likeButtonState))];
+        self.numberOfLikes = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(numberOfLikes))];
     }
     
     return self;
@@ -93,6 +100,7 @@
     [aCoder encodeObject:self.caption forKey:NSStringFromSelector(@selector(caption))];
     [aCoder encodeObject:self.comments forKey:NSStringFromSelector(@selector(comments))];
     [aCoder encodeInteger:self.likeButtonState forKey:NSStringFromSelector(@selector(likeButtonState))];
+    [aCoder encodeObject:self.numberOfLikes forKey:NSStringFromSelector(@selector(numberOfLikes))];
 }
 
 @end
