@@ -203,6 +203,47 @@
     }
 }
 
+#pragma mark - Liking Media
+
+- (void) toggleLikeOnMedia:(Media *)mediaItem withCompletionHandler:(void (^)(void))completionHandler {
+    NSString *urlString = [NSString stringWithFormat:@"media/%@/likes", mediaItem.idNumber];
+    NSDictionary *parameters = @{@"access_token": self.accessToken};
+    
+    if (mediaItem.likeButtonState == LikeStateNotLiked) {
+        mediaItem.likeButtonState = LikeStateLiking;
+        
+        [self.instagramOperationManager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+            mediaItem.likeButtonState = LikeStateLiked;
+            
+            if (completionHandler) {
+                completionHandler();
+            }
+        } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+            mediaItem.likeButtonState = LikeStateNotLiked;
+            
+            if (completionHandler) {
+                completionHandler();
+            }
+        }];
+    } else if (mediaItem.likeButtonState == LikeStateLiked) {
+        mediaItem.likeButtonState = LikeStateUnlking;
+        
+        [self.instagramOperationManager DELETE:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+            mediaItem.likeButtonState = LikeStateNotLiked;
+            
+            if (completionHandler) {
+                completionHandler();
+            }
+        } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+            mediaItem.likeButtonState = LikeStateLiked;
+            
+            if (completionHandler) {
+                completionHandler();
+            }
+        }];
+    }
+}
+
 #pragma mark - AFNetworking
 
 - (void) createOperationManager {

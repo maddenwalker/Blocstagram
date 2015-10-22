@@ -210,6 +210,18 @@
  
 }
 
+- (void) cellDidPressLikeButton:(MediaTableViewCell *)cell {
+    Media *item = cell.mediaItem;
+    
+    [[DataSource sharedInstance] toggleLikeOnMedia:item withCompletionHandler:^{
+        if (cell.mediaItem == item) {
+            cell.mediaItem = item;
+        }
+    }];
+    
+    cell.mediaItem = item;
+}
+
 #pragma mark - MediaFullScreenViewControllerDelegate
 
 - (void) didTapShareButton:(Media *)mediaItem {

@@ -33,6 +33,8 @@
 		8C7030641BC5C3CE00AF1D05 /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7030631BC5C3CE00AF1D05 /* Media.m */; settings = {ASSET_TAGS = (); }; };
 		8C7030671BC5C46D00AF1D05 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7030661BC5C46D00AF1D05 /* Comment.m */; settings = {ASSET_TAGS = (); }; };
 		8C70306B1BC5C51400AF1D05 /* DataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C70306A1BC5C51400AF1D05 /* DataSource.m */; settings = {ASSET_TAGS = (); }; };
+		8C8443BD1BD84DF5005F009D /* CircleSpinnerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8443BC1BD84DF5005F009D /* CircleSpinnerView.m */; settings = {ASSET_TAGS = (); }; };
+		8C8443C01BD854B3005F009D /* LikeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8443BF1BD854B3005F009D /* LikeButton.m */; settings = {ASSET_TAGS = (); }; };
 		8C9A735D1BCC2A5B00450F51 /* MediaFullScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9A735C1BCC2A5B00450F51 /* MediaFullScreenViewController.m */; settings = {ASSET_TAGS = (); }; };
 		8CC9DDFF1BC5D27000A7E520 /* MediaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC9DDFE1BC5D27000A7E520 /* MediaTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
@@ -96,6 +98,10 @@
 		8C7030661BC5C46D00AF1D05 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		8C7030691BC5C51400AF1D05 /* DataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSource.h; sourceTree = "<group>"; };
 		8C70306A1BC5C51400AF1D05 /* DataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSource.m; sourceTree = "<group>"; };
+		8C8443BB1BD84DF5005F009D /* CircleSpinnerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleSpinnerView.h; sourceTree = "<group>"; };
+		8C8443BC1BD84DF5005F009D /* CircleSpinnerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleSpinnerView.m; sourceTree = "<group>"; };
+		8C8443BE1BD854B3005F009D /* LikeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LikeButton.h; sourceTree = "<group>"; };
+		8C8443BF1BD854B3005F009D /* LikeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LikeButton.m; sourceTree = "<group>"; };
 		8C9A735B1BCC2A5B00450F51 /* MediaFullScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFullScreenViewController.h; sourceTree = "<group>"; };
 		8C9A735C1BCC2A5B00450F51 /* MediaFullScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaFullScreenViewController.m; sourceTree = "<group>"; };
 		8CC9DDFD1BC5D27000A7E520 /* MediaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaTableViewCell.h; sourceTree = "<group>"; };
@@ -240,6 +246,10 @@
 		8CC9DE001BC5D27500A7E520 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8C8443BB1BD84DF5005F009D /* CircleSpinnerView.h */,
+				8C8443BC1BD84DF5005F009D /* CircleSpinnerView.m */,
+				8C8443BE1BD854B3005F009D /* LikeButton.h */,
+				8C8443BF1BD854B3005F009D /* LikeButton.m */,
 				8C26B3C81BD5A2BB00AE03BA /* MediaFullScreenAnimator.h */,
 				8C26B3C91BD5A2BB00AE03BA /* MediaFullScreenAnimator.m */,
 				8CC9DDFD1BC5D27000A7E520 /* MediaTableViewCell.h */,
@@ -470,9 +480,11 @@
 				8C679EDD1BC5A92D004376E0 /* AppDelegate.m in Sources */,
 				8C70306B1BC5C51400AF1D05 /* DataSource.m in Sources */,
 				8C9A735D1BCC2A5B00450F51 /* MediaFullScreenViewController.m in Sources */,
+				8C8443C01BD854B3005F009D /* LikeButton.m in Sources */,
 				8C679EDA1BC5A92D004376E0 /* main.m in Sources */,
 				8C2C2D6E1BC71C7400121853 /* APIKeys.m in Sources */,
 				8C26B3CA1BD5A2BB00AE03BA /* MediaFullScreenAnimator.m in Sources */,
+				8C8443BD1BD84DF5005F009D /* CircleSpinnerView.m in Sources */,
 				8C679F221BC5AB6E004376E0 /* ImagesTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
