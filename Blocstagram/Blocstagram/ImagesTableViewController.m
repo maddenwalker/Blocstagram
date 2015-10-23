@@ -14,12 +14,13 @@
 #import "MediaTableViewCell.h"
 #import "MediaFullScreenViewController.h"
 #import "MediaFullScreenAnimator.h"
+#import "CameraViewController.h"
 
 
 @interface ImagesTableViewController () <   MediaTableViewCellDelegate,
                                             MediaFullScreenViewControllerDelegate,
                                             UIViewControllerTransitioningDelegate,
-                                            UIScrollViewDelegate>
+                                            CameraViewControllerDelegate>
 
 @property (strong, nonatomic) DataSource *sharedInstance;
 @property (weak, nonatomic) UIImageView *lastTappedImageView;
@@ -58,6 +59,12 @@
     [self.tableView registerClass:[MediaTableViewCell class] forCellReuseIdentifier:@"mediaCell"];
     
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] ||
+        [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(cameraPressed:)];
+        self.navigationItem.rightBarButtonItem = cameraButton;
+    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -260,6 +267,26 @@
 
 - (void) cell:(MediaTableViewCell *)cell didComposeComment:(NSString *)comment {
     [[DataSource sharedInstance] commentOnMediaItem:cell.mediaItem withCommentText:comment];
+}
+
+#pragma mark - Camera and CamerViewControllerDelegate
+
+- (void) cameraPressed:(UIBarButtonItem *)sender {
+    CameraViewController *cameraVC = [[CameraViewController alloc] init];
+    cameraVC.delegate = self;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:cameraVC];
+    [self presentViewController:nav animated:YES completion:nil];
+    return;
+}
+
+- (void) cameraViewController:(CameraViewController *)cameraViewController didCompleteWithImage:(UIImage *)image {
+    [cameraViewController dismissViewControllerAnimated:YES completion:^{
+        if (image) {
+            NSLog(@"Got an Image!");
+        } else {
+            NSLog(@"Closed without an image.");
+        }
+    }];
 }
 
 #pragma mark - Keyboard Handling
