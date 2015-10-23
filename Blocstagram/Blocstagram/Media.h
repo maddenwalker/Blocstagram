@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, MediaDownloadState) {
 @property (strong, nonatomic) NSArray *comments;
 @property (assign, nonatomic) LikeState likeButtonState;
 @property (strong, nonatomic) NSNumber *numberOfLikes;
+@property (strong, nonatomic) NSString *temporaryComment;
 
 - (instancetype) initWithDictionary:(NSDictionary *)mediaDictionary;
 

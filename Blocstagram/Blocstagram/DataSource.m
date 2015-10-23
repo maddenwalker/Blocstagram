@@ -211,9 +211,10 @@
     
     if (mediaItem.likeButtonState == LikeStateNotLiked) {
         mediaItem.likeButtonState = LikeStateLiking;
-        [NSThread sleepForTimeInterval:1.0];
-        mediaItem.likeButtonState = LikeStateLiked;
-        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            mediaItem.likeButtonState = LikeStateLiked;
+            completionHandler();
+        });
         
         //removing ineffectual IG API code
 //        [self.instagramOperationManager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
@@ -230,11 +231,13 @@
 //                completionHandler();
 //            }
 //        }];
+        
     } else if (mediaItem.likeButtonState == LikeStateLiked) {
         mediaItem.likeButtonState = LikeStateUnlking;
-        [NSThread sleepForTimeInterval:1.0];
-        mediaItem.likeButtonState = LikeStateNotLiked;
-        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            mediaItem.likeButtonState = LikeStateNotLiked;
+            completionHandler();
+        });
         
         //removing ineffectual IG API code
 //        [self.instagramOperationManager DELETE:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
@@ -254,6 +257,41 @@
     }
     
     [self saveImages];
+}
+
+#pragma mark - Commenting
+
+- (void) commentOnMediaItem:(Media *)mediaItem withCommentText:(NSString *)commentText {
+    if (!commentText || commentText.length == 0) {
+        return;
+    }
+    
+    NSString *urlString = [NSString stringWithFormat:@"media/%@/comments", mediaItem.idNumber];
+    NSDictionary *parameters = @{@"access_token" : self.accessToken, @"text" : commentText};
+    
+    [self.instagramOperationManager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        mediaItem.temporaryComment = nil;
+        
+        NSString *refreshMediaURLString = [NSString stringWithFormat:@"media/%@", mediaItem.idNumber];
+        [self.instagramOperationManager GET:refreshMediaURLString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+            Media *newMediaItem = [[Media alloc] initWithDictionary:responseObject];
+            NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+            NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
+            [mutableArrayWithKVO replaceObjectAtIndex:index withObject:newMediaItem];
+        } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+            [self reloadMediaItem:mediaItem];
+         }];
+    } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+        NSLog(@"Error: %@", error);
+        NSLog(@"Response: %@", operation.responseString);
+        [self reloadMediaItem:mediaItem];
+    }];
+}
+
+- (void) reloadMediaItem:(Media *)mediaItem {
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+    NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
+    [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
 }
 
 #pragma mark - AFNetworking
