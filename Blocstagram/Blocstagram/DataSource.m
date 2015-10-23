@@ -266,26 +266,50 @@
         return;
     }
     
-    NSString *urlString = [NSString stringWithFormat:@"media/%@/comments", mediaItem.idNumber];
-    NSDictionary *parameters = @{@"access_token" : self.accessToken, @"text" : commentText};
+    mediaItem.temporaryComment = nil;
+    //let's fake some data
     
-    [self.instagramOperationManager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-        mediaItem.temporaryComment = nil;
-        
-        NSString *refreshMediaURLString = [NSString stringWithFormat:@"media/%@", mediaItem.idNumber];
-        [self.instagramOperationManager GET:refreshMediaURLString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-            Media *newMediaItem = [[Media alloc] initWithDictionary:responseObject];
-            NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
-            NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
-            [mutableArrayWithKVO replaceObjectAtIndex:index withObject:newMediaItem];
-        } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-            [self reloadMediaItem:mediaItem];
-         }];
-    } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-        NSLog(@"Error: %@", error);
-        NSLog(@"Response: %@", operation.responseString);
-        [self reloadMediaItem:mediaItem];
-    }];
+    Media *newMediaItem = mediaItem;
+    NSDictionary *fakeUser = @{
+                               @"full_name" : @"Lucas Lima",
+                               @"id" : @"2164795549",
+                               @"profile_picture" : @"https://scontent.cdninstagram.com/hphotos-xaf1/t51.2885-19/s150x150/11850090_1627855997464420_1857060477_a.jpg",
+                               @"username" : @"lucaslima7080",
+                               };
+    
+    User *user = [[User alloc] initWithDictionary:fakeUser];
+    
+    Comment *newComment = [[Comment alloc] initWithDictionary:@{@"id" : @"1111", @"text" : commentText, @"from" : user}];
+    NSMutableArray *mutableCommentsArray = [newMediaItem.comments mutableCopy];
+    [mutableCommentsArray insertObject:newComment atIndex:0];
+    newMediaItem.comments = mutableCommentsArray;
+    
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+    NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
+    [mutableArrayWithKVO replaceObjectAtIndex:index withObject:newMediaItem];
+    
+//    Comment out old IG code
+//    
+//    NSString *urlString = [NSString stringWithFormat:@"media/%@/comments", mediaItem.idNumber];
+//    NSDictionary *parameters = @{@"access_token" : self.accessToken, @"text" : commentText};
+//    
+//    [self.instagramOperationManager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+//        mediaItem.temporaryComment = nil;
+//        
+//        NSString *refreshMediaURLString = [NSString stringWithFormat:@"media/%@", mediaItem.idNumber];
+//        [self.instagramOperationManager GET:refreshMediaURLString parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+//            Media *newMediaItem = [[Media alloc] initWithDictionary:responseObject];
+//            NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+//            NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
+//            [mutableArrayWithKVO replaceObjectAtIndex:index withObject:newMediaItem];
+//        } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+//            [self reloadMediaItem:mediaItem];
+//         }];
+//    } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+//        NSLog(@"Error: %@", error);
+//        NSLog(@"Response: %@", operation.responseString);
+//        [self reloadMediaItem:mediaItem];
+//    }];
 }
 
 - (void) reloadMediaItem:(Media *)mediaItem {
@@ -361,7 +385,7 @@
 
 -(void) downloadImageForMediaItem:(Media *)mediaItem {
     if (mediaItem.mediaURL && !mediaItem.image) {
-        NSLog(@"Downloading %@", mediaItem.mediaURL.absoluteString);
+        
         mediaItem.downloadState = MediaDownloadStateDownloadInProgress;
         
         [self.instagramOperationManager GET:mediaItem.mediaURL.absoluteString
