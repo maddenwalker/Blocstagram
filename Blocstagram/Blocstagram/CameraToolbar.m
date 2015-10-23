@@ -77,7 +77,7 @@
                                                                                       options:kNilOptions
                                                                                       metrics:nil
                                                                                         views:viewDictionary];
-    
+    //TODO:Figure out what is going with WRT layout contraints breaking
     // The left and right buttons have 10 points spacing from the top. All three buttons are aligned with the bottom of the view.
     NSArray *leftButtonVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[_leftButton]|"
                                                                                      options:kNilOptions
