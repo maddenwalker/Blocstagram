@@ -18,11 +18,13 @@
 
 @interface MediaFullScreenViewController : UIViewController
 
+@property (strong, nonatomic) Media *media;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIImageView *imageView;
 
 - (instancetype) initWithMedia:(Media *)media;
 - (void) centerScrollView;
+- (void) recalculateZoomScale;
 
 @property (weak, nonatomic) id <MediaFullScreenViewControllerDelegate> delegate;
 
