@@ -299,9 +299,9 @@
 				8C9A735B1BCC2A5B00450F51 /* MediaFullScreenViewController.h */,
 				8C9A735C1BCC2A5B00450F51 /* MediaFullScreenViewController.m */,
 				8C88FF681BDB3298009343E8 /* CropImageViewController.h */,
+				8C88FF691BDB3298009343E8 /* CropImageViewController.m */,
 				8C88FF6B1BDBFC56009343E8 /* ImageLibraryViewController.h */,
 				8C88FF6C1BDBFC56009343E8 /* ImageLibraryViewController.m */,
-				8C88FF691BDB3298009343E8 /* CropImageViewController.m */,
 				8C2C2D711BC71EDF00121853 /* LoginViewController.h */,
 				8C2C2D721BC71EDF00121853 /* LoginViewController.m */,
 			);

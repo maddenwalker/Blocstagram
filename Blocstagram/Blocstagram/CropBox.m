@@ -12,6 +12,8 @@
 
 @property (strong, nonatomic) NSArray *horizontalLines;
 @property (strong, nonatomic) NSArray *verticalLines;
+@property (strong, nonatomic) UIToolbar *topView;
+@property (strong, nonatomic) UIToolbar *bottomView;
 
 @end
 
@@ -22,6 +24,18 @@
     
     if (self) {
         self.userInteractionEnabled = NO;
+        self.topView = [UIToolbar new];
+        self.bottomView = [UIToolbar new];
+        UIColor *whiteBG = [UIColor colorWithWhite:1.0 alpha:.15];
+        self.topView.barTintColor = whiteBG;
+        self.bottomView.barTintColor = whiteBG;
+        self.topView.alpha = 0.5;
+        self.bottomView.alpha = 0.5;
+        
+        NSMutableArray *views = [@[self.topView, self.bottomView] mutableCopy];
+        for (UIView *view in views) {
+            [self addSubview:view];
+        }
         
         NSArray *lines = [self.horizontalLines arrayByAddingObjectsFromArray:self.verticalLines];
         for (UIView *lineView in lines) {
@@ -65,14 +79,22 @@
     
     CGFloat width = CGRectGetWidth(self.frame);
     CGFloat thirdOfWidth = width / 3;
+    CGFloat sizeOfScreen = CGRectGetHeight(self.frame);
+    
+    self.topView.frame = CGRectMake(0, 0, width, ( sizeOfScreen - width ) / 2 );
+    
+    CGFloat yOriginOfBottomView = CGRectGetMaxY(self.topView.frame) + width;
+    CGFloat heightOfBottomView = CGRectGetHeight(self.frame) - yOriginOfBottomView;
+    self.bottomView.frame = CGRectMake(0, yOriginOfBottomView, width, heightOfBottomView);
+
     
     for (int i = 0; i < 4; i++) {
         UIView *horizonalLine = self.horizontalLines[i];
         UIView *verticalLine = self.verticalLines[i];
         
-        horizonalLine.frame = CGRectMake(0, ( i * thirdOfWidth ), width, 0.5);
+        horizonalLine.frame = CGRectMake(0, self.topView.frame.size.height + ( i * thirdOfWidth ), width, 0.5);
         
-        CGRect verticalFrame = CGRectMake( i * thirdOfWidth , 0, 0.5, width);
+        CGRect verticalFrame = CGRectMake( i * thirdOfWidth , self.topView.frame.size.height, 0.5, width);
         
         if (i == 3) {
             verticalFrame.origin.x -= 0.5;

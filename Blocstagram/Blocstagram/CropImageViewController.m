@@ -34,10 +34,14 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [self centerScrollView];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.clipsToBounds = YES;
+    self.view.clipsToBounds = NO;
     
     [self.view addSubview:self.cropBox];
     
@@ -54,17 +58,14 @@
 - (void) viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    CGRect cropRect = CGRectZero;
-    
-    CGFloat edgeSize = MIN(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
-    cropRect.size = CGSizeMake(edgeSize, edgeSize);
+    CGRect cropRect = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
     
     CGSize size = self.view.frame.size;
     
     self.cropBox.frame = cropRect;
     self.cropBox.center = CGPointMake( size.width / 2, size.height / 2 );
     self.scrollView.frame = self.cropBox.frame;
-    self.scrollView.clipsToBounds = NO;
+    self.scrollView.clipsToBounds = YES;
     
     [self recalculateZoomScale];
     
