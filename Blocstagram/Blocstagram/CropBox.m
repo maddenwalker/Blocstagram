@@ -26,9 +26,9 @@
         self.userInteractionEnabled = NO;
         self.topView = [UIToolbar new];
         self.bottomView = [UIToolbar new];
-        UIColor *whiteBG = [UIColor colorWithWhite:1.0 alpha:.15];
-        self.topView.barTintColor = whiteBG;
-        self.bottomView.barTintColor = whiteBG;
+        UIColor *blackBG = [UIColor colorWithWhite:0 alpha:.15];
+        self.topView.barTintColor = blackBG;
+        self.bottomView.barTintColor = blackBG;
         self.topView.alpha = 0.5;
         self.bottomView.alpha = 0.5;
         
@@ -67,7 +67,7 @@
     
     for (int i = 0; i < 4 ; i++) {
         UIView *view = [UIView new];
-        view.backgroundColor = [UIColor whiteColor];
+        view.backgroundColor = [UIColor blackColor];
         [array addObject:view];
     }
     
