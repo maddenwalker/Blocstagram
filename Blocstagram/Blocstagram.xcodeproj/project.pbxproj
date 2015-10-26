@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		26A904C86A397A0D04946281 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 821C4FB748FDDA79A371EDF9 /* libPods.a */; };
 		8C26B3CA1BD5A2BB00AE03BA /* MediaFullScreenAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C26B3C91BD5A2BB00AE03BA /* MediaFullScreenAnimator.m */; };
+		8C2A8E6B1BDDD8CD00E6DCEB /* FilterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2A8E6A1BDDD8CD00E6DCEB /* FilterCollectionViewCell.m */; };
 		8C2C2D6E1BC71C7400121853 /* APIKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C2D6D1BC71C7400121853 /* APIKeys.m */; };
 		8C2C2D701BC71CC200121853 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C2C2D6F1BC71CC200121853 /* APIKeys.plist */; };
 		8C2C2D731BC71EDF00121853 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C2D721BC71EDF00121853 /* LoginViewController.m */; };
@@ -68,6 +69,8 @@
 		821C4FB748FDDA79A371EDF9 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C26B3C81BD5A2BB00AE03BA /* MediaFullScreenAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaFullScreenAnimator.h; sourceTree = "<group>"; };
 		8C26B3C91BD5A2BB00AE03BA /* MediaFullScreenAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaFullScreenAnimator.m; sourceTree = "<group>"; };
+		8C2A8E691BDDD8CD00E6DCEB /* FilterCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCollectionViewCell.h; sourceTree = "<group>"; };
+		8C2A8E6A1BDDD8CD00E6DCEB /* FilterCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCollectionViewCell.m; sourceTree = "<group>"; };
 		8C2C2D6C1BC71C7400121853 /* APIKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIKeys.h; sourceTree = "<group>"; };
 		8C2C2D6D1BC71C7400121853 /* APIKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIKeys.m; sourceTree = "<group>"; };
 		8C2C2D6F1BC71CC200121853 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
@@ -272,6 +275,8 @@
 		8CC9DE001BC5D27500A7E520 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8C2A8E691BDDD8CD00E6DCEB /* FilterCollectionViewCell.h */,
+				8C2A8E6A1BDDD8CD00E6DCEB /* FilterCollectionViewCell.m */,
 				8C88FF651BDB2EE3009343E8 /* CropBox.h */,
 				8C88FF661BDB2EE3009343E8 /* CropBox.m */,
 				8C8443BB1BD84DF5005F009D /* CircleSpinnerView.h */,
@@ -526,6 +531,7 @@
 				8C9A735D1BCC2A5B00450F51 /* MediaFullScreenViewController.m in Sources */,
 				8CA8183A1BDADC740007905E /* CameraViewController.m in Sources */,
 				8C8443C01BD854B3005F009D /* LikeButton.m in Sources */,
+				8C2A8E6B1BDDD8CD00E6DCEB /* FilterCollectionViewCell.m in Sources */,
 				8CA8183D1BDAE98F0007905E /* UIImage+ImageUtilities.m in Sources */,
 				8C679EDA1BC5A92D004376E0 /* main.m in Sources */,
 				8C88FF6A1BDB3298009343E8 /* CropImageViewController.m in Sources */,

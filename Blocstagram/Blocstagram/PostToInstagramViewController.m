@@ -7,6 +7,7 @@
 //
 
 #import "PostToInstagramViewController.h"
+#import "FilterCollectionViewCell.h"
 
 @interface PostToInstagramViewController() <UICollectionViewDataSource, UICollectionViewDelegate, UIDocumentInteractionControllerDelegate>
 
@@ -79,7 +80,7 @@
         self.navigationItem.rightBarButtonItem = self.sendToInstagramBarButtonItem;
     }
     
-    [self.filterCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    [self.filterCollectionView registerClass:[FilterCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     
     self.view.backgroundColor = [UIColor blackColor];
     self.filterCollectionView.backgroundColor = [UIColor blackColor];
@@ -120,39 +121,11 @@
     return self.filterImages.count;
 }
 
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+-(FilterCollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    FilterCollectionViewCell *cell = (FilterCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     
-    static NSInteger imageViewTag = 1000;
-    static NSInteger labelTag = 1001;
-    
-    UIImageView *thumbnail = (UIImageView *)[cell.contentView viewWithTag:imageViewTag];
-    UILabel *label = (UILabel *)[cell.contentView viewWithTag:labelTag];
-    
-    UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.filterCollectionView.collectionViewLayout;
-    CGFloat thumbnailEdgeSize = flowLayout.itemSize.width;
-    
-    if (!thumbnail) {
-        thumbnail = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, thumbnailEdgeSize, thumbnailEdgeSize)];
-        thumbnail.contentMode = UIViewContentModeScaleAspectFill;
-        thumbnail.tag = imageViewTag;
-        thumbnail.clipsToBounds = YES;
-        
-        [cell.contentView addSubview:thumbnail];
-    }
-    
-    if (!label) {
-        label = [[UILabel alloc] initWithFrame:CGRectMake(0, thumbnailEdgeSize, thumbnailEdgeSize, 20)];
-        label.tag = labelTag;
-        label.textAlignment = NSTextAlignmentCenter;
-        label.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:10];
-        label.backgroundColor = [UIColor whiteColor];
-        
-        [cell.contentView addSubview:label];
-    }
-    
-    thumbnail.image = self.filterImages[indexPath.row];
-    label.text = self.filterTitles[indexPath.row];
+    [cell.thumbnail setImage:self.filterImages[indexPath.row]];
+    [cell.label setText:self.filterTitles[indexPath.row]];
     
     return cell;
 }
@@ -218,6 +191,19 @@
         if (moodyFilter) {
             [moodyFilter setValue:sourceCIImage forKey:kCIInputImageKey];
             [self addCIImageToCollectionView:moodyFilter.outputImage withFilterTitle:NSLocalizedString(@"Moody", @"Moody Filter")];
+        }
+    }];
+    
+    // Tint filter
+    
+    [self.photoFilterOperationQueue addOperationWithBlock:^{
+        CIFilter *tintFilter = [CIFilter filterWithName:@"CITemperatureAndTint"];
+        
+        if (tintFilter) {
+            [tintFilter setValue:sourceCIImage forKey:kCIInputImageKey];
+            [tintFilter setValue:[CIVector vectorWithX:6500 Y:500] forKey:@"inputNeutral"];
+            [tintFilter setValue:[CIVector vectorWithX:1000 Y:630] forKey:@"inputTargetNeutral"];
+            [self addCIImageToCollectionView:tintFilter.outputImage withFilterTitle:NSLocalizedString(@"Tint", @"Tint Filter")];
         }
     }];
     
@@ -289,6 +275,30 @@
             [filterComposite setValue:sepiaPlusWhiteSpecksImage forKey:kCIInputImageKey];
             [filterComposite setValue:darkScratchesImage forKey:kCIInputBackgroundImageKey];
             [self addCIImageToCollectionView:filterComposite.outputImage withFilterTitle:NSLocalizedString(@"Film", @"Film Filter")];
+        }
+    }];
+    
+    //Sunbeam Filter
+    
+    [self.photoFilterOperationQueue addOperationWithBlock:^{
+        CIFilter *sunBeam = [CIFilter filterWithName:@"CISunbeamsGenerator"];
+        
+        CIFilter *filterComposite = [CIFilter filterWithName:@"CIMultiplyCompositing"];
+        
+        if (sunBeam) {
+            [sunBeam setValue:[CIVector vectorWithX:200 Y:200] forKey:@"inputCenter"];
+            [sunBeam setValue:[CIColor colorWithRed:1 green:1 blue:1 alpha:0.5] forKey:@"inputColor"];
+            [sunBeam setValue:@100.0 forKey:@"inputSunRadius"];
+            [sunBeam setValue:@0.50 forKey:@"inputStriationStrength"];
+            [sunBeam setValue:@2.58 forKey:@"inputMaxStriationRadius"];
+            [sunBeam setValue:@1.38 forKey:@"inputStriationContrast"];
+            [sunBeam setValue:@0.00 forKey:@"inputTime"];
+            
+            [filterComposite setValue:sunBeam.outputImage forKey:kCIInputImageKey];
+            [filterComposite setValue:sourceCIImage forKey:kCIInputBackgroundImageKey];
+            
+            CIImage *imagePlusSunbeam = filterComposite.outputImage;
+            [self addCIImageToCollectionView:imagePlusSunbeam withFilterTitle:NSLocalizedString(@"Sunburst", @"Sunburst Filter")];
         }
     }];
 }

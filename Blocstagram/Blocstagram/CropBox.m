@@ -67,7 +67,7 @@
     
     for (int i = 0; i < 4 ; i++) {
         UIView *view = [UIView new];
-        view.backgroundColor = [UIColor blackColor];
+        view.backgroundColor = [UIColor whiteColor];
         [array addObject:view];
     }
     
@@ -84,9 +84,8 @@
     self.topView.frame = CGRectMake(0, 0, width, ( sizeOfScreen - width ) / 2 );
     
     CGFloat yOriginOfBottomView = CGRectGetMaxY(self.topView.frame) + width;
-    CGFloat heightOfBottomView = CGRectGetHeight(self.frame) - yOriginOfBottomView;
+    CGFloat heightOfBottomView = sizeOfScreen - yOriginOfBottomView;
     self.bottomView.frame = CGRectMake(0, yOriginOfBottomView, width, heightOfBottomView);
-
     
     for (int i = 0; i < 4; i++) {
         UIView *horizonalLine = self.horizontalLines[i];

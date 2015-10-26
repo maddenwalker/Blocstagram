@@ -277,9 +277,7 @@
                                @"username" : @"lucaslima7080",
                                };
     
-    User *user = [[User alloc] initWithDictionary:fakeUser];
-    
-    Comment *newComment = [[Comment alloc] initWithDictionary:@{@"id" : @"1111", @"text" : commentText, @"from" : user}];
+    Comment *newComment = [[Comment alloc] initWithDictionary:@{@"id" : @"1111", @"text" : commentText, @"from" : fakeUser}];
     NSMutableArray *mutableCommentsArray = [newMediaItem.comments mutableCopy];
     [mutableCommentsArray insertObject:newComment atIndex:0];
     newMediaItem.comments = mutableCommentsArray;
