@@ -26,8 +26,9 @@
 @property (strong, nonatomic) Media *mediaItem;
 @property (weak, nonatomic) id <MediaTableViewCellDelegate> delegate;
 @property (strong, nonatomic, readonly) ComposeCommentView *commentView;
+@property (strong, nonatomic) UITraitCollection *overrideTraitCollection;
 
-+ (CGFloat) heightForMediaItem:(Media *)mediaItem width:(CGFloat)width;
++ (CGFloat) heightForMediaItem:(Media *)mediaItem width:(CGFloat)width traitCollection:(UITraitCollection *)traitCollection;
 
 - (void) stopComposingComment;
 
