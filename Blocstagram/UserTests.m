@@ -26,6 +26,7 @@
 }
 
 - (void) testThatInitializationWorks {
+    
     NSDictionary *sourceDictionary = @{@"id": @"8675309",
                                        @"username" : @"d'oh",
                                        @"full_name" : @"Homer Simpson",

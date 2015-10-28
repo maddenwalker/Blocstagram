@@ -14,6 +14,7 @@
 		8C2C2D701BC71CC200121853 /* APIKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C2C2D6F1BC71CC200121853 /* APIKeys.plist */; };
 		8C2C2D731BC71EDF00121853 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2C2D721BC71EDF00121853 /* LoginViewController.m */; };
 		8C2E96961BE153C400D71339 /* UserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2E96951BE153C400D71339 /* UserTests.m */; };
+		8C2E96981BE1590C00D71339 /* MediaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2E96971BE1590C00D71339 /* MediaTests.m */; };
 		8C679EDA1BC5A92D004376E0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C679ED91BC5A92D004376E0 /* main.m */; };
 		8C679EDD1BC5A92D004376E0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C679EDC1BC5A92D004376E0 /* AppDelegate.m */; };
 		8C679EE51BC5A92D004376E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C679EE41BC5A92D004376E0 /* Assets.xcassets */; };
@@ -47,6 +48,8 @@
 		8CA8183D1BDAE98F0007905E /* UIImage+ImageUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA8183C1BDAE98F0007905E /* UIImage+ImageUtilities.m */; };
 		8CC9DDFF1BC5D27000A7E520 /* MediaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC9DDFE1BC5D27000A7E520 /* MediaTableViewCell.m */; };
 		8CD515E61BD9BC1200583A22 /* ComposeCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD515E51BD9BC1200583A22 /* ComposeCommentView.m */; };
+		8CDE4DD51BE168CC007ED7B2 /* ComposeCommentViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDE4DD41BE168CC007ED7B2 /* ComposeCommentViewTests.m */; };
+		8CDE4DD71BE16A44007ED7B2 /* MediaTableViewCellTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDE4DD61BE16A44007ED7B2 /* MediaTableViewCellTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,7 +80,8 @@
 		8C2C2D6F1BC71CC200121853 /* APIKeys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = APIKeys.plist; sourceTree = "<group>"; };
 		8C2C2D711BC71EDF00121853 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		8C2C2D721BC71EDF00121853 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		8C2E96951BE153C400D71339 /* UserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTests.m; sourceTree = "<group>"; };
+		8C2E96951BE153C400D71339 /* UserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserTests.m; path = ../UserTests.m; sourceTree = "<group>"; };
+		8C2E96971BE1590C00D71339 /* MediaTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MediaTests.m; path = ../MediaTests.m; sourceTree = "<group>"; };
 		8C679ED51BC5A92D004376E0 /* Blocstagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blocstagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C679ED91BC5A92D004376E0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8C679EDB1BC5A92D004376E0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -135,6 +139,8 @@
 		8CC9DDFE1BC5D27000A7E520 /* MediaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaTableViewCell.m; sourceTree = "<group>"; };
 		8CD515E41BD9BC1200583A22 /* ComposeCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeCommentView.h; sourceTree = "<group>"; };
 		8CD515E51BD9BC1200583A22 /* ComposeCommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeCommentView.m; sourceTree = "<group>"; };
+		8CDE4DD41BE168CC007ED7B2 /* ComposeCommentViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ComposeCommentViewTests.m; path = ../ComposeCommentViewTests.m; sourceTree = "<group>"; };
+		8CDE4DD61BE16A44007ED7B2 /* MediaTableViewCellTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MediaTableViewCellTests.m; path = ../MediaTableViewCellTests.m; sourceTree = "<group>"; };
 		A8B93FFB4EA0AB0A1072A7CE /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		E849F8C3590589C1643E1C00 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -177,7 +183,6 @@
 		8C679ECC1BC5A92D004376E0 = {
 			isa = PBXGroup;
 			children = (
-				8C2E96951BE153C400D71339 /* UserTests.m */,
 				8C679ED71BC5A92D004376E0 /* Blocstagram */,
 				8C679EF11BC5A92D004376E0 /* BlocstagramTests */,
 				8C679EFC1BC5A92D004376E0 /* BlocstagramUITests */,
@@ -225,6 +230,10 @@
 		8C679EF11BC5A92D004376E0 /* BlocstagramTests */ = {
 			isa = PBXGroup;
 			children = (
+				8CDE4DD61BE16A44007ED7B2 /* MediaTableViewCellTests.m */,
+				8CDE4DD41BE168CC007ED7B2 /* ComposeCommentViewTests.m */,
+				8C2E96971BE1590C00D71339 /* MediaTests.m */,
+				8C2E96951BE153C400D71339 /* UserTests.m */,
 				8C679EF21BC5A92D004376E0 /* BlocstagramTests.m */,
 				8C679EF41BC5A92D004376E0 /* Info.plist */,
 			);
@@ -551,8 +560,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C2E96981BE1590C00D71339 /* MediaTests.m in Sources */,
 				8C2E96961BE153C400D71339 /* UserTests.m in Sources */,
 				8C679EF31BC5A92D004376E0 /* BlocstagramTests.m in Sources */,
+				8CDE4DD71BE16A44007ED7B2 /* MediaTableViewCellTests.m in Sources */,
+				8CDE4DD51BE168CC007ED7B2 /* ComposeCommentViewTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
