@@ -230,12 +230,12 @@
     
     if (self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular) {
         fullScreenVC.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self presentViewController:fullScreenVC animated:YES completion:nil];
     } else {
         fullScreenVC.transitioningDelegate = self;
         fullScreenVC.modalPresentationStyle = UIModalPresentationCustom;
+        [self.navigationController pushViewController:fullScreenVC animated:YES];
     }
-    
-    [self.navigationController pushViewController:fullScreenVC animated:YES];
 }
 
 - (void) cell:(MediaTableViewCell *)cell didTwoTapImageView:(UIImageView *)imageView {

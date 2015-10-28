@@ -13,7 +13,10 @@
 
 @property (strong, nonatomic) UIBarButtonItem *shareButton;
 @property (strong, nonatomic) UITapGestureRecognizer *tap;
+@property (strong, nonatomic) UITapGestureRecognizer *tapOnGrayBorder;
 @property (strong, nonatomic) UITapGestureRecognizer *doubleTap;
+
+@property (strong, nonatomic) UIWindow *dimmedView;
 
 @end
 
@@ -59,11 +62,14 @@
     
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
     
+    self.tapOnGrayBorder = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGrayBorderFired:)];
+//    [self.tapOnGrayBorder setCancelsTouchesInView:NO];
+    
     self.doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapFired:)];
     self.doubleTap.numberOfTapsRequired = 2;
     
     [self.tap requireGestureRecognizerToFail:self.doubleTap];
-    
+
     [self.scrollView addGestureRecognizer:self.tap];
     [self.scrollView addGestureRecognizer:self.doubleTap];
     
@@ -78,6 +84,7 @@
     [super viewWillLayoutSubviews];
     
     self.scrollView.frame = self.view.bounds;
+    [self.scrollView.window addGestureRecognizer:self.tapOnGrayBorder];
     
     [self recalculateZoomScale];
 }
@@ -134,7 +141,16 @@
 #pragma mark - UIGestureRecognizer Methods
 
 - (void) tapFired:(UITapGestureRecognizer *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.traitCollection.userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void) tapGrayBorderFired:(UITapGestureRecognizer *)sender {
+    NSLog(@"I am here in tapGrayBorderFired:");
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) doubleTapFired:(UITapGestureRecognizer *)sender {
