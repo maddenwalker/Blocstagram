@@ -165,6 +165,20 @@
         }
     }];
     
+    //Motion Blur Filter
+    
+    [self.photoFilterOperationQueue addOperationWithBlock:^{
+        CIFilter *blurFilter = [CIFilter filterWithName:@"CIMotionBlur"];
+        
+        if (blurFilter) {
+            [blurFilter setValue:sourceCIImage forKey:kCIInputImageKey];
+            [blurFilter setValue:[NSNumber numberWithBool:50.0] forKey:@"inputRadius"];
+            [blurFilter setValue:[NSNumber numberWithBool:0.0] forKey:@"inputAngle"];
+            
+            [self addCIImageToCollectionView:blurFilter.outputImage withFilterTitle:NSLocalizedString(@"Blur", @"Blur Filter")];
+        }
+    }];
+    
     // Warm filter
     
     [self.photoFilterOperationQueue addOperationWithBlock:^{
