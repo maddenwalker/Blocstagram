@@ -45,6 +45,7 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
     NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow;
     if (indexPath) {
         [self.tableView deselectRowAtIndexPath:indexPath animated:animated];
@@ -81,7 +82,7 @@
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
-    
+    [super viewDidDisappear:YES];
 }
 
 - (void) didReceiveMemoryWarning {
